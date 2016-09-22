@@ -4,7 +4,7 @@ function initialiser() {
 				//de définir des options d'affichage de notre carte
 				var options = {
 					center: latlng,
-					zoom: 19,
+					zoom: 13,
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
 				
