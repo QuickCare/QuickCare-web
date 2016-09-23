@@ -11,11 +11,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" href="style.css">
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="assets/css/style.css">
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="bootstrap/dateTimePicker/css/bootstrap-datetimepicker.css">
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<!-- Elément Google Maps indiquant que la carte doit être affiché en plein écran et
 		qu'elle ne peut pas être redimensionnée par l'utilisateur -->
@@ -23,20 +23,39 @@
 		<!-- Inclusion de l'API Google MAPS -->
 		<!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
 		<!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvsFHTTm8Y-6kh8XJxlQPCyk2ErzW1BGY"></script> -->
-		<script src="map.js"></script>
 		
 		<script src="jquery-3.1.0.js"></script>
 	</head>
-	<body onload="initialiser();">
+	<body onload="geolocation()">
+
+		<!-- Popups -->
+			<div class="none" id="bg-black-popup"></div>
+			<div id="popup-hopital" class="none">
+				<img id="close-popup-hopital" style="position: absolute; width: 32px; top: 10px; left: 10px; cursor: pointer;" src="img/close.png">
+				<h2>Hopital <span id="hopital_name"></span></h2>
+				<p id="addr_hopital_map">142 rue du Test</p>
+				<hr style="margin-bottom: 15px; width: 75%;">
+				<h3 style="color: #e27689;"><span id="pourc_remp"></span>% de Remplissage</h3>
+				<h3>Services :</h3>
+				<ul>
+					<li>Maternité</li>
+					<li>Neurologie</li>
+					<li>Pediatrie</li>
+					<li>Ophtalmologie</li>
+					<li>ORL</li>
+				</ul>
+				<button id="select_dest" style="margin-top: 20px;">Commander un chauffeur pour cette adresse</button>
+			</div>
 
 		<!-- Header -->
 			<div id="header">
 
-				<div class="top">
+				<div class="urgence">
 
 					<!-- Logo -->
-						<div id="logo">
-							<!-- Logo à rajouter -->
+						<div id="div_logo">
+							<img src="img/logo.jpeg" id="logo">
+							<p id="logo_desc">Estimation du niveau de remplissage des salles d'attentes.</p>
 						</div>
 
 					<!-- Nav -->
@@ -54,27 +73,17 @@
 								   <li><a href="http://foobar.tld" id="foobar-link" class="icon fa-whatever-icon-you-want"><span class="label">Foobar</span></a></li>
 
 							-->
-							<ul>
-								<li><a href="#top" id="top-link" class="skel-layers-ignoreHref"><span class="icon fa-home">Urgences</span></a></li>
-								<li><a href="#portfolio" id="portfolio-link" class="skel-layers-ignoreHref"><span class="icon fa-th">Portfolio</span></a></li>
-								<li><a href="#about" id="about-link" class="skel-layers-ignoreHref"><span class="icon fa-user">About Me</span></a></li>
-								<li><a href="#contact" id="contact-link" class="skel-layers-ignoreHref"><span class="icon fa-envelope">Contact</span></a></li>
+							<ul style="font-size: 28px;">
+								<li><a href="#urgence" id="urgence-link" class="skel-layers-ignoreHref"><span class="icon fa-hospital-o">Urgences</span></a></li>
+								<li><a href="#transport" id="transport-link" class="skel-layers-ignoreHref"><span class="icon fa-car">Transports</span></a></li>
+								<li><a href="#conseil" id="conseil-link" class="skel-layers-ignoreHref"><span class="icon fa-gift">Conseils</span></a></li>
 							</ul>
 						</nav>
 
 				</div>
 
-				<div class="bottom">
-
-					<!-- Social Icons -->
-						<ul class="icons">
-							<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-							<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-							<li><a href="#" class="icon fa-github"><span class="label">Github</span></a></li>
-							<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
-							<li><a href="#" class="icon fa-envelope"><span class="label">Email</span></a></li>
-						</ul>
-
+				<div id="div_pub">
+					<a target="_blank" href="https://www.uber.com"><img src="img/pub.jpeg" id="pub"></a>
 				</div>
 
 			</div>
@@ -82,133 +91,92 @@
 		<!-- Main -->
 			<div id="main">
 
+				<div id="urgences">
+					<p>Filtrez votre recherche en précisant le service souhaité : </p>
+					<select class="form-control" id="urgences_select">
+						<script>
+								$(document).ready(function(){
+									getServices();
+								});
+						</script>
+					</select>
+					<button class="btn btn-primary">Valider</button>
+				</div>
+
 				<!-- Intro -->
 					<section id="top" class="one dark cover">
-						<div id="urgence" class="container">
-							<div id="carte" style="width: 90%; height:650px;"></div>
+						<div id="urgence" class="container" style="width: 100%;">
+							<div id="carte" style="width: 100%; height:650px;"></div>
 							
 								<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvsFHTTm8Y-6kh8XJxlQPCyk2ErzW1BGY"></script>
 
-							<!-- <header>
-								<h2 class="alt">Hi! I'm <strong>Prologue</strong>, a <a href="http://html5up.net/license">free</a> responsive<br />
-								site template designed by <a href="http://html5up.net">HTML5 UP</a>.</h2>
-								<p>Ligula scelerisque justo sem accumsan diam quis<br />
-								vitae natoque dictum sollicitudin elementum.</p>
-							</header>
-
-							<footer>
-								<a href="#portfolio" class="button scrolly">Magna Aliquam</a>
-							</footer> -->
-
 						</div>
 					</section>
 
-				<!-- Portfolio -->
-					<section id="portfolio" class="two">
+				<!-- Transport -->
+					<section id="s_transport" class="two">
 						<div class="container">
-
-							<header>
-								<h2>Portfolio</h2>
-							</header>
-
-							<p>Vitae natoque dictum etiam semper magnis enim feugiat convallis convallis
-							egestas rhoncus ridiculus in quis risus amet curabitur tempor orci penatibus.
-							Tellus erat mauris ipsum fermentum etiam vivamus eget. Nunc nibh morbi quis
-							fusce hendrerit lacus ridiculus.</p>
-
-							<div class="row">
-								<div class="4u 12u$(mobile)">
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
-										<header>
-											<h3>Ipsum Feugiat</h3>
-										</header>
-									</article>
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic03.jpg" alt="" /></a>
-										<header>
-											<h3>Rhoncus Semper</h3>
-										</header>
-									</article>
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+							  	<div class="modal-dialog" role="document">
+							    	<div class="modal-content">
+							      		<div class="modal-header">
+							        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							        		<h4 class="modal-title">Confirmation de la réservation</h4>
+							      		</div>
+							      		<div class="modal-body">
+							        		<p>Vous avez réserver un chauffeur pour le <span id="date_chauffeur" class="span_modal"></span> à <span class="span_modal" id="heure_chauffeur"></span></p>
+							        		<p>Départ : <span class="span_modal" id="lieu_depart"></span> </p>
+							        		<p>Arrivée : <span class="span_modal" id="lieu_arrivée"></span></p>
+							      		</div>
+							      		<div class="modal-footer">
+							        		<button id="modal_close" type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+							      		</div>
+							    	</div><!-- /.modal-content -->
+							  	</div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
+							<div id="transport">
+								<div id="transport_header" class="page-header">
+									<h2>Transports</h2>
 								</div>
-								<div class="4u 12u$(mobile)">
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic04.jpg" alt="" /></a>
-										<header>
-											<h3>Magna Nullam</h3>
-										</header>
-									</article>
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic05.jpg" alt="" /></a>
-										<header>
-											<h3>Natoque Vitae</h3>
-										</header>
-									</article>
+								<div id="form_transport">
+									<div class="form_title">
+										<b>Réserver votre trajet :</b><br><br><br>
+									</div>
+									<p><input type="text" id="datepicker" placeholder="Date" class="form_datetime" readonly></p>	   
+									<p><input type="text" name="adr_depart" placeholder="Adresse de départ"></p>
+									<p><input type="text" id="adr_arr_res" name="adr_arrivee" placeholder="Adresse d'arrivée"></p>
+									<br>
+									<input id="submit_transport" type="submit">
+								</div><!--
+								
+							--><div id="form_uber">
+									<div class="form_title">
+									<b>Vous partez maintenant ?</b><br><br><br>
+									</div>
+									<p><input type="text" name="adr_depart" placeholder="Adresse de départ"></p>
+									<p><input type="text" id="adr_arr_uber" placeholder="Adresse d'arrivée"></p>
+									<br>
+									<input id="submit_uber" type="submit">
 								</div>
-								<div class="4u$ 12u$(mobile)">
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic06.jpg" alt="" /></a>
-										<header>
-											<h3>Dolor Penatibus</h3>
-										</header>
-									</article>
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic07.jpg" alt="" /></a>
-										<header>
-											<h3>Orci Convallis</h3>
-										</header>
-									</article>
-								</div>
+								
 							</div>
-
 						</div>
 					</section>
 
-				<!-- About Me -->
-					<section id="about" class="three">
+				<!-- Conseil -->
+					<section id="conseil" class="three">
 						<div class="container">
-
-							<header>
-								<h2>About Me</h2>
-							</header>
-
-							<a href="#" class="image featured"><img src="images/pic08.jpg" alt="" /></a>
-
-							<p>Tincidunt eu elit diam magnis pretium accumsan etiam id urna. Ridiculus
-							ultricies curae quis et rhoncus velit. Lobortis elementum aliquet nec vitae
-							laoreet eget cubilia quam non etiam odio tincidunt montes. Elementum sem
-							parturient nulla quam placerat viverra mauris non cum elit tempus ullamcorper
-							dolor. Libero rutrum ut lacinia donec curae mus vel quisque sociis nec
-							ornare iaculis.</p>
-
-						</div>
-					</section>
-
-				<!-- Contact -->
-					<section id="contact" class="four">
-						<div class="container">
-
-							<header>
-								<h2>Contact</h2>
-							</header>
-
-							<p>Elementum sem parturient nulla quam placerat viverra
-							mauris non cum elit tempus ullamcorper dolor. Libero rutrum ut lacinia
-							donec curae mus. Eleifend id porttitor ac ultricies lobortis sem nunc
-							orci ridiculus faucibus a consectetur. Porttitor curae mauris urna mi dolor.</p>
-
-							<form method="post" action="#">
-								<div class="row">
-									<div class="6u 12u$(mobile)"><input type="text" name="name" placeholder="Name" /></div>
-									<div class="6u$ 12u$(mobile)"><input type="text" name="email" placeholder="Email" /></div>
-									<div class="12u$">
-										<textarea name="message" placeholder="Message"></textarea>
-									</div>
-									<div class="12u$">
-										<input type="submit" value="Send Message" />
-									</div>
-								</div>
-							</form>
+							<div id="conseil_header" class="page-header">
+								<h2 style="text-align: left;">Conseils</h2>
+							</div>
+							<b>En cas d'urgence: faites l'état des lieux, appelez les professionnels concernés et si possible effectuez les gestes de premier secours.</b>
+							<img src="img/avc.png" style="margin-top: 25px; height: 250px; margin: 20px;">
+							<img src="img/nums.png" style="margin-top: 25px; width: 250px; margin: 20px;">
+							<br>
+							<img src="img/appeler.png" style="margin-top: -25px; height: 200px;">
+							<img src="img/respiration.png" style="margin-top: -25px; height: 200px;">
+							<img src="img/masser.jpg" style="margin-top: -25px; height: 200px;">
+							<img src="img/defibriller.jpg" style="margin-top: -25px; height: 200px;">
 
 						</div>
 					</section>
@@ -220,7 +188,7 @@
 
 				<!-- Copyright -->
 					<ul class="copyright">
-						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+						<li>&copy; QuickCare. All rights reserved.</li>
 					</ul>
 
 			</div>
@@ -233,6 +201,14 @@
 			<script src="assets/js/util.js"></script>
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
+			<script src="js/code.js"></script>
+			<script src="js/map.js"></script>
+			<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+			<script src="bootstrap/js/bootstrap.min.js"></script>
+			<script src="bootstrap/dateTimePicker/js/bootstrap-datetimepicker.min.js"></script>
+			<script type="text/javascript">
+				$(".form_datetime").datetimepicker({format: 'dd/mm/yyyy - hh:ii', autoclose: true});
+			</script>  
 
 	</body>
 </html>

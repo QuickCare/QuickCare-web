@@ -1,0 +1,325 @@
+.none {
+	display: none;
+}
+
+input {
+	height: 40px;
+	width: 200px;
+}
+
+#top {
+	height: 100%;
+}
+
+#urgence {
+	padding : 0;
+	height: 100%;
+}
+
+#carte {
+	width: 100%;
+	height: 100%;
+}
+
+@media screen and (max-width: 1620px) and (min-width: 961px) {
+	#main section.cover {
+		padding: 0em 0;
+	}
+}
+
+.skel-layers-ignoreHref:hover {
+	opacity: 0.8;
+	background-color: #e27689;
+}
+
+.skel-layers-ignoreHref:hover, .skel-layers-ignoreHref:hover .icon {
+	color: #000000;
+}
+
+.active:hover, .active:hover .icon {
+	color: #ffffff;
+	opacity: 1;
+}
+
+#div_logo {
+	text-align: left;
+	display: block;
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+
+#logo {
+	height: 140px;
+	width: 140px;
+	display: inline-block;
+}
+
+#logo_desc {
+	display: inline-block;
+	width: 100px;
+	text-align: center;
+	font-size: 18px;
+	vertical-align: middle;
+	color: #e27689;
+	margin-left: -5px;
+	margin-top: 10px;
+}
+
+@media screen and (max-width: 1320px) {
+
+	#div_logo {
+		text-align: center;
+	}
+}
+
+#div_pub {
+	text-align: center;
+	display: block;
+}
+
+#pub {
+	height: 140px;
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+
+#bg-black-popup {
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index:98;
+    -moz-opacity: 0.8;
+    opacity:.80;
+    filter: alpha(opacity=80);
+}
+
+#popup-hopital {
+    position: fixed;
+    text-align: center;
+    height: auto;
+    width: 40%;
+    padding: 3% 3%;
+    top: 15%;
+    left: 30%;
+    background-color: white;
+    color: #222;
+    z-index: 99;
+}
+
+#submit_transport, #submit_uber{
+	background-color : #e27689;
+}
+
+
+#transport input{
+	text-align: center;
+}
+
+#form_transport{
+	text-align: center;
+
+}
+
+#form_uber{
+
+	text-align: center;
+
+}
+
+.page-header{
+	border-bottom: 2px solid #e27689;
+}
+
+#modal_close{
+	background-color: #e27689;
+}
+
+.span_modal {
+	font-weight: 800;
+}
+
+
+
+
+@media screen and (min-width: 961px) and (max-width: 1880px) {
+	#main > section{
+		padding: 0;
+	}
+
+	#transport {
+		width: 100%;
+		text-align: left;
+		height: 600px;
+
+	}
+
+	#conseil {
+		width: 100%;
+		text-align: left;
+		height: 600px;
+
+	}
+
+	#form_transport{
+		margin-top: 50px;
+		display : inline-block;
+		width: 40%;
+		padding : 20px;
+		border-right: 2px solid #e27689;
+
+	}
+	#form_uber {
+		display : inline-block;
+		width: 40%;
+		
+
+	}
+}
+
+@media screen and (min-width: 961px) and (max-width: 1620px) {
+	#main > section{
+		padding: 0;
+	}
+
+	#main section.cover {
+	    padding: 0em 0;
+	}
+	#transport {
+		width: 100%;
+
+	}
+	#form_transport{
+		
+		display : inline-block;
+		width: 40%;
+		padding : 20px;
+		border-right: 2px solid #e27689;
+
+	}
+	#form_uber {
+		display : inline-block;
+		width: 40%;
+		
+
+	}
+
+}
+
+@media screen and (min-width: 961px) and (max-width: 1320px) {
+	#main > section{
+		padding: 0;
+	}
+
+	#transport {
+		width: 100%;
+
+	}
+	#form_transport{
+		
+		display : inline-block;
+		width: 40%;
+		padding : 20px;
+		border-right: 2px solid #e27689;
+
+	}
+	#form_uber {
+		display : inline-block;
+		width: 40%;
+		
+
+	}
+
+}
+
+@media screen and (max-width: 960px) {
+	#main > section{
+		padding: 0;
+	}
+
+	#transport {
+		width: 100%;
+		padding-bottom: 30px;
+	}
+
+	#transport_header{
+		display : inline;
+		margin-top : 0;
+		width: 100%;
+	}
+	#transport_header h2{
+		font-size: 26px;
+	}
+
+	.form_title{
+		font-size : 20px;
+		width: 100%;
+		font-weight: bold;
+	}
+
+	#form_transport{
+		width: 100%;
+		padding-bottom: 30px;
+
+	}
+	#form_uber {
+		width: 100%;	
+
+	}
+
+}
+
+@media screen and (max-width: 736px) {
+	#main > section{
+		padding: 0;
+	}
+
+	#transport {
+		width: 100%;
+		padding-bottom: 30px;
+	}
+
+	#transport_header{
+		display : inline;
+		margin-top : 0;
+		width: 100%;
+	}
+	#transport_header h2{
+		font-size: 26px;
+	}
+
+	.form_title{
+		font-size : 20px;
+		width: 100%;
+		font-weight: bold;
+	}
+
+	#form_transport{
+		width: 100%;
+		padding-bottom: 30px;
+
+	}
+	#form_uber {
+		width: 100%;	
+
+	}
+}
+
+#urgences {
+    background-color: rgba(0,0,0,0.8);
+    height: 10%;
+    padding: 1%;
+}
+
+#urgences p {
+    color: white;
+    display: inline-block;
+}
+
+#urgences select {
+    width: auto;
+    display: inline-block;
+    margin-left: 1%;
+}

@@ -1966,6 +1966,7 @@
 			line-height: 1;
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
+			margin-top: -8px;
 		}
 
 		.icon > .label {
